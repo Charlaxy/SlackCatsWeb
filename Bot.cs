@@ -17,6 +17,8 @@ namespace SlackCatsWeb
             Log.AppendLine("SlackCats v0.6");
             Log.AppendLine();
 
+            Console.WriteLine(Log);
+
             var thread = new Thread(new ThreadStart(Meow));
 
             thread.Start();
