@@ -80,8 +80,9 @@ namespace SlackCatsWeb
 
                     var text = data.messages[i].text;
                     var user = data.messages[i].user;
+                    var test = "test";
 
-                    Log.AppendLine(String.Format("{0} {1}", user, text));
+                    Log.AppendLine(String.Format("{0} {1} {2}", user, text, test));
 
                     if (String.IsNullOrEmpty(upload))
                     {
