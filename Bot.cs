@@ -89,7 +89,9 @@ namespace SlackCatsWeb
                         continue;
                     }
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
+
+                    Log.AppendLine("SENDING MEOW!");
 
                     json = JsonConvert.SerializeObject(new
                     {
