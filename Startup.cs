@@ -28,6 +28,7 @@ namespace SlackCatsWeb
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync(Bot.Log.ToString());
+                context.Response.WriteAsync("Something");
             });
         }
     }
