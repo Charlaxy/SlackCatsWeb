@@ -12,9 +12,6 @@ namespace SlackCatsWeb
     {
         static Bot()
         {
-            Download = Environment.GetEnvironmentVariable("SlackCats_URL_Download");
-            Upload = Environment.GetEnvironmentVariable("SlackCats_URL_Upload");
-
             Log = new StringBuilder();
 
             var thread = new Thread(new ThreadStart(Meow));
@@ -22,22 +19,10 @@ namespace SlackCatsWeb
             thread.Start();
         }
 
-        static public string Download
-        {
-            get;
-            set;
-        }
-
         static public StringBuilder Log
         {
             get;
             private set;
-        }
-
-        static public string Upload
-        {
-            get;
-            set;
         }
 
         static private void Meow()
@@ -47,12 +32,17 @@ namespace SlackCatsWeb
 
             while (true)
             {
-                if (String.IsNullOrEmpty(Download))
+                Thread.Sleep(5000);
+
+                var download = Environment.GetEnvironmentVariable("SlackCats_URL_Download");
+
+                if (String.IsNullOrEmpty(download))
                 {
+                    Log.AppendLine("Missing Environment Variable: SlackCats_URL_Download");
                     continue;
                 }
 
-                var json = client.DownloadString(Download);
+                var json = client.DownloadString(download);
 
                 var data = JsonConvert.DeserializeObject<History>(json);
 
@@ -67,6 +57,8 @@ namespace SlackCatsWeb
                     Log.AppendLine("BAD DATA!");
                     continue;
                 }
+
+                var upload = Environment.GetEnvironmentVariable("SlackCats_URL_Upload");
 
                 System.Array.Reverse(data.messages);
 
@@ -86,8 +78,9 @@ namespace SlackCatsWeb
 
                     Log.AppendLine(String.Format("{0} {1}", user, text));
 
-                    if (String.IsNullOrEmpty(Upload))
+                    if (String.IsNullOrEmpty(upload))
                     {
+                        Log.AppendLine("Missing Environment Variable: SlackCats_URL_Upload");
                         continue;
                     }
 
@@ -103,10 +96,15 @@ namespace SlackCatsWeb
                         icon_emoji = ":cat:"
                     });
 
-                    client.UploadString(Upload, "POST", json);
-                }
+                    var status = client.UploadString(upload, "POST", json);
 
-                Thread.Sleep(5000);
+                    if (status == "ok")
+                    {
+                        continue;
+                    }
+
+                    Log.AppendLine("CHAT FAILED!");
+                }
             }
         }
 
