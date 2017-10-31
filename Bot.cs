@@ -84,7 +84,7 @@ namespace SlackCatsWeb
                         continue;
                     }
 
-                    if (!Regex.IsMatch(text, "m+e+o*w+", RegexOptions.IgnoreCase))
+                    if (!text.Contains("meow") && !Regex.IsMatch(text, "m+e+o*w+", RegexOptions.IgnoreCase))
                     {
                         continue;
                     }
