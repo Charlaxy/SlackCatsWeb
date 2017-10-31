@@ -89,6 +89,8 @@ namespace SlackCatsWeb
                         continue;
                     }
 
+                    Thread.Sleep(1000);
+
                     json = JsonConvert.SerializeObject(new
                     {
                         text = ":cat:",
